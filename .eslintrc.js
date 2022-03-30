@@ -11,5 +11,9 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'no-extend-native': 0,
+    'func-names': 0,
+    'no-plusplus': 0,
+    'no-console': 0,
   },
 };
