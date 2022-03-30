@@ -1,0 +1,21 @@
+{
+  "name": "interview",
+  "version": "1.0.0",
+  "description": "进大厂搬砖",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanjwGit/interview.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tanjwGit/interview/issues"
+  },
+  "homepage": "https://github.com/tanjwGit/interview#readme"
+}
