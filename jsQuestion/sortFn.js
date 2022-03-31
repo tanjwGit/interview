@@ -8,9 +8,10 @@ function createRandomArray(arrLength = 10) {
   });
 }
 
+const randomArr = createRandomArray();
 /**
  * 冒泡排序
- * 思想：冒泡排序是一种交换排序，核心是冒泡，把数组中最小的那个往上冒，冒的过程就是和他相邻的元素交换。
+ * 思想：冒泡排序是一种交换排序，核心是冒泡，把数组中最大的那个往上冒，冒的过程就是和他相邻的元素交换。
  * 步骤：
  * 1. 比较相邻的元素。如果后一个比前一个大，就交换它们两个
  * 2. 对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对，这样在最后的元素应该会是最大的数
@@ -29,7 +30,7 @@ Array.prototype.bubbleSort = function () {
   return arr;
 };
 
-console.log('冒泡排序::', createRandomArray().bubbleSort().join(' '));
+console.log('冒泡排序::', [...randomArr].bubbleSort().join(' '));
 
 // 优化1:
 // 在某次遍历中如果没有数据交换，说明整个数组已经有序,但仍然还要比较O(N^2)次，但无交换次数
@@ -95,3 +96,26 @@ console.log('冒泡排序 优化1::', [-1, -3, -2, 1, 2, 3, 4, 5].bubbleSort1().
 // };
 // console.log('冒泡排序 优化2::', [5, 3, 4, 1, 2, 6, 7, 8, 9, 10].bubbleSort2().join(' '));
 // 3 4 1 2 5
+
+/**
+ * 选择排序
+ * 思想:
+ * 每次遍历出一个最小值放在最左侧
+ * 每次遍历从第i项右边选出一个最小值放在第i位
+*/
+Array.prototype.selectSort = function () {
+  const arr = this;
+  const len = arr.length;
+
+  for (let i = 0; i < len - 1; i++) {
+    let minIndex = i;
+    for (let j = i + 1; j < len; j++) {
+      if (arr[minIndex] > arr[j]) {
+        minIndex = j;
+      }
+    }
+    [arr[minIndex], arr[i]] = [arr[i], arr[minIndex]];
+  }
+  return arr;
+};
+console.log('选择排序::', [...randomArr].selectSort().join(' '));
