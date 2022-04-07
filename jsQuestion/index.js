@@ -56,9 +56,8 @@ console.log([] + {}); // '[object Object]'
 // 不同类型 + 的行为：
 // 1. 有一个操作数是字符串： 另一个数也转成字符串
 // 2. 有一个操作数是对象: 就调用对象的valueOf转成原始值，如果没有改方法或者调用后仍是非原始值，在调用toString方法
-//    1 + {valueOf: () => 1, toString: () => '1'}: 期望结果: 2, 实际结果 2
-//    1 + {valueOf: () => ({}), toString: () => '1'}: 期望结果: '11', 实际结果 '11'
-// TODO: 此例子更向是把valueOf的结果Number了
+//    1 + {valueOf: () => 1, toString: () => '1'}:  结果 2
+//    1 + {valueOf: () => ({}), toString: () => '1'}:  结果 '11'
 // 3. 其他情况下，两个操作数都会被转成数字执行加法操作
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf#examples
