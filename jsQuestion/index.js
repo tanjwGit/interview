@@ -62,6 +62,16 @@ console.log([] + {}); // '[object Object]'
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf#examples
 
+
+/**
+ * 补充: 对象转原始类型：
+ * 如果Symbol.toPrimitive()方法，优先调用再返回
+ * 调用valueOf()，如果转换为原始类型，则返回
+ * 调用toString()，如果转换为原始类型，则返回
+ * 如果都没有返回原始类型，会报错
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toPrimitive
+*/
+
 // 第五题
 const out = 25;
 const inner = {
