@@ -248,3 +248,27 @@ setTimeout(function() {
  * 执行nextTick队列的任务，发现又两个任务，依次执行，打印出3和10，然后检查微任务队列，也是两个任务，依次执行，打印出5和12
  * 到这里是有队列都清空了。
 */
+
+
+// 第十三题
+function test(a, b) {
+  console.log(a);
+  console.log(b);
+  var b = 234;
+  console.log(b);
+  a = 123;
+  console.log(a);
+  function a() {}
+  var a;
+  b = 234;
+  var b = function () {};
+  console.log(a);
+  console.log(b);
+}
+test(1);
+// 答案：functionA undefined 234 123 123 functionB
+// 解析：根据函数预编译的四步
+
+
+
+
