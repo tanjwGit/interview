@@ -184,38 +184,3 @@ var searchRange = function(nums, target) {
 
 ### 题目五 有效的完全平方数: TODO
 [力扣367](https://leetcode-cn.com/)
-
-
-
-```js
-function aaa(x, n) {
-  if(n === 0){
-    return 1;
-  }
-  const num = aaa(x, Math.floor(n / 2));
-  if ((n % 2) === 1) {
-    return  num * num * x;
-  } else {
-     return num * num;
-  }
-}
-```
-
-
-```js
-var searchRange = function(nums, target) {
-    const leftBorderIndex = getLeftBorder(nums, target);
-    const rightBorderIndex = getRightBorder(nums, target);
-    // 情况一
-    if (leftBorder == -2 || rightBorder == -2) {
-      return [-1, -1];
-    };
-    // 情况三
-    if(rightBorder >= leftBorder) {
-      return [leftBorder, rightBorder];
-    }
-    // 情况二
-    return [-1, -1];
-}
-```
-或者
