@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
 
 // 发布订阅 Event
@@ -33,3 +34,41 @@ class Event {
     }
   };
 }
+
+// 深拷贝
+function deepCode(object) {
+  const map = new Map();
+  const _deepCode = (obj) => {
+    if (typeof obj === 'object' && obj !== null) {
+      let newObj = Array.isArray(obj) ? [] : {};
+      if (map.has(obj)) {
+        newObj = map.get(obj);
+      } else {
+        map.set(obj, obj);
+        Object.entries(obj).forEach(([key, value]) => {
+          newObj[key] = _deepCode(value);
+        });
+      }
+
+      return newObj;
+    }
+    return obj;
+  };
+  return _deepCode(object);
+}
+
+// const obj1 = {};
+// const obj2 = {};
+// obj1.key = obj2;
+// obj2.key = obj1;
+// const obj = {
+//   a: obj1,
+//   b: 2,
+//   c: 3,
+//   d: {
+//     e: 4,
+//     f: 5,
+//     j: 6,
+//     h: [7, 8, 9, { i: 10, j: [11, 12] }, { k: 13 }],
+//   },
+// };
