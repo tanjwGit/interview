@@ -94,3 +94,32 @@ function add(...arg) {
   fn.toString = () => arg.reduce((sum, v) => sum + v, 0);
   return fn;
 }
+
+// 数组展开
+function flat1(array, num) {
+  function* _flat(arr, n) {
+    if (Array.isArray(arr) && n >= 0) {
+      n--;
+      for (let i = 0; i < arr.length; i++) {
+        yield* _flat(arr[i], n);
+      }
+    } else {
+      yield arr;
+    }
+  }
+  return [..._flat(array, num)];
+}
+
+function flat2(array, num) {
+  return array.reduce((_arr, item) => {
+    if (Array.isArray(item) && num > 0) {
+      _arr.push(...flat2(item, num - 1));
+    } else {
+      _arr.push(item);
+    }
+    return _arr;
+  }, []);
+}
+
+// const tree = ['a', ['b', 'c'], ['d', 'e', ['f']]];
+// flat(tree, 0);
