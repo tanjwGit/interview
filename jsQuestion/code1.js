@@ -72,3 +72,25 @@ function deepCode(object) {
 //     h: [7, 8, 9, { i: 10, j: [11, 12] }, { k: 13 }],
 //   },
 // };
+
+// 柯里化
+function curry(fn, ...arg) {
+  if (arg.length >= fn.length) {
+    return fn(...arg);
+  }
+  return (...arg1) => {
+    curry(fn, ...arg, ...arg1);
+  };
+}
+
+// 无限调用
+function add(...arg) {
+  // 闭包，把初始arg保存起来
+  const fn = (...arg1) => {
+    arg.concat(arg1);
+    // 每次调用都把arg更改为最新的参数列列表
+    return fn;
+  };
+  fn.toString = () => arg.reduce((sum, v) => sum + v, 0);
+  return fn;
+}
