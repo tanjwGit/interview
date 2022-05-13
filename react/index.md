@@ -1,10 +1,5 @@
-## react 当中 key 的作用？
-- `key` 在同级元素中，要保持唯一性、稳定性;
-- 用于 `diff` 算法中
-  - 借助 `key` 来识别当前元素需要的操作， 新增、删除、更新、移动，减少不必要的操作元素的开销，提高性能;
-- 需要借助Key值来判断元素与本地状态的关联关系（TODO: 暂时不懂）
 
-## 调用 `setState` 之后发生了什么?
+## react 原理？
   - 从三层架构说起
     - Scheduler([ˈskedʒuːlər] 斯盖酒ler): 调度器
       - 调度任务优先级，高优先级优先进入 Reconciler;
@@ -60,6 +55,7 @@
             - Fiber节点已经存在对应DOM节点, 所以不需要生成DOM节点
             - 仅处理props
               - 被处理的props会放入新fiber节点的updateQueue队列中, 在commit阶段被渲染在页面上
+                - 原生节点是放的props, 类组件节点放的是upDate任务
                 - 新fiber节点: 即workInProgress
           - mount时
             - 为Fiber节点生成对应的DOM节点
@@ -164,18 +160,35 @@
     - `getSnapshotBeforeUpdate`
     - 调度 `useEffect`
   - mutation阶段:
-    - 更新的节点: useLayoutEffect的销毁函数
-    - 删除的节点: componentWillUnmount
+    - 更新的节点: `useLayoutEffect`的销毁函数
+    - 删除的节点: `componentWillUnmount`
   - layout阶段:
-    - 更新的class节点: componentDidUpdate
-    - 新增的class节点: componentDidMount
-    - hook: useLayoutEffect回调函数、useEffect销毁函数、useEffect回调函数
-    - 调用触发更新的 this.setState 的回调函数
+    - 更新的class节点: `componentDidUpdate`
+    - 新增的class节点: `componentDidMount`
+    - hook: `useLayoutEffect`回调函数、`useEffect`销毁函数、`useEffect`回调函数
+    - 调用触发更新的 `this.setState` 的回调函数
     - 调用ReactDOM.render的第三个参数回调函数;
 
 ## Diff 算法？
+ - 只比较同级节点, 不考虑跨层级的节点复用;
+ - 在上次更新时的fiber节点存在Dom的情况下,根据key 和 节点类型判断是否复用、移动、新建、销毁；
+
+ - 又分为单节点 diff 和 多节点diff
+  - 单节点
+  - 多节点
+    - 多节点，基于大多数操作，更新组件的概率更高的原因，diff分为两步
+      - 第一轮遍历: 处理更新的节点: 其实是顺序不变的更新的节点，顺序变化的，也会放在第二轮处理;
+      - 第二轮遍历: 处理剩下的不属于更新的节点(新增、删除、移动)
 
 ## 优先级的调度？
+
+## 为什么 componentWillXXX unsafe?
+<!-- 自己的理解，不知道对不对 -->
+- 第一种 执行低优的时候，插入了其他组件的高优任务，导致低优组件的componentWillXXX执行两次，这种情况，两个组件的任务都是只执行一次，但是具有低优的组件触发了两次renderer
+
+- 第二种是 同一组件 存在高优低优任务，第一次renderer,先执行高优，然后发生第二次renderer,低优高优都在执行一次，相当于一个组件执行了两次renderer，就触发了两次componentWillXXX
+
+你的理解大体正确。 就把更新想象成一个整体的概念， 被打断就可能整体重新执行，那么willXXX 就可能执行多次;
 
 ## useLayoutEffect与useEffect的区别?
   - mutation阶段会执行useLayoutEffect hook的销毁函数
