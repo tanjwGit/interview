@@ -123,3 +123,21 @@ function flat2(array, num) {
 
 // const tree = ['a', ['b', 'c'], ['d', 'e', ['f']]];
 // flat(tree, 0);
+
+// 判断是否为子数组
+// TODO
+
+// 比较版本号大小
+// TODO
+
+// 数组转树
+// TODO
+
+// 合并两个有序数组
+// TODO
+
+// 查找两个有序数组的中位数
+// TODO
+
+// 如何实现一个 LazyMan？
+https://juejin.cn/post/6844903791188246541

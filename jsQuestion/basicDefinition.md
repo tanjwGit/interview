@@ -5,6 +5,8 @@ js是一门单线程的语言，但是为了执行一些异步任务时不阻塞
 
 异步任务又分为【宏任务】（比如setTimeout、setInterval）和【微任务】（比如promise），它们分别会进入不同的队列，执行栈为空完后会优先检查微任务队列，如果有微任务的话会一次性执行完所有的微任务，然后去宏任务队列里检查，如果有则取出一个任务到主线程执行，执行完后又会去检查微任务队列，如此循环。
 
+设计 Loop 机制和 Task 队列是为了支持异步，解决逻辑执行阻塞主线程的问题，设计 MicroTask 队列的插队机制是为了解决高优任务尽早执行的问题。
+
 ## 预编译
 #### 顺序：
   1. 语法分析
@@ -187,8 +189,56 @@ for (var j = 0; j < 10; j++) {
 4. 遇到script外部js, 设置有async/defer, 浏览器就创建线程异步加载，并继续解析文档；
 对于async,脚本加载完后立即执行
 5. 遇到img等带有src的标签，正常解析dom结构，浏览器异步加载src,并继续解析文档（看到标签直接生产dom树，不等待img加载完src）
-6. 当文档解析完成（domTree建立完毕，不是加载完毕），document。readyState = 'interactive';
+6. 当文档解析完成（domTree建立完毕，不是加载完毕），document.readyState = 'interactive';
 7. 文档解析完后，所有设置defer的脚本按照顺序执行
 8. document对象触发 DOMContentLoaded 事件，标志着 程序执行从 同步脚本执行阶段，转化为 事件驱动阶段；
 9. 当所有的 async 脚本加载完成并执行后， img等加载完成后（页面所有的都执行加载完之后），document.readyState = 'complete', window对象触发load事件;
 10. 从此，以异步响应方式处理用户输入，网络事件等；
+
+
+
+
+
+let arr1 = new Array(n).fill(0).map(() => new Array(n).fill(0));
+let arr2 = new Array(n).fill(new Array(n).fill(0));
+
+arr1[0] === arr1[1] // false
+arr2[0] === arr2[1] // true
+
+
+
+```js
+
+let a = 0
+let b = async () => {
+  a =  await 10 + a
+  console.log('2', a)
+}
+b()
+a++
+console.log('1', a)
+```
+
+
+```js
+let a = 0
+let b = async () => {
+  a =  (await 10) + a
+  console.log('2', a) 
+}
+b()
+a++
+console.log('1', a)  
+```
+
+
+```js
+let a = 0
+let b = async () => {
+  a =  await (10 + a)
+  console.log('2', a)  
+}
+b()
+a++
+console.log('1', a)  
+```

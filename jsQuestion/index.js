@@ -250,6 +250,37 @@ setTimeout(function() {
 */
 
 
+// 这五种宏任务都是宏任务
+// Timers 阶段：执行一定数量的定时器，也就是 setTimeout、setInterval 的 callback，太多的话留到下次执行
+// 微任务：执行所有 nextTick 的微任务，再执行其他的普通微任务
+// Pending 阶段：执行一定数量的 IO 和网络的异常回调，太多的话留到下次执行
+// 微任务：执行所有 nextTick 的微任务，再执行其他的普通微任务
+// Idle/Prepare 阶段：内部用的一个阶段
+// 微任务：执行所有 nextTick 的微任务，再执行其他的普通微任务
+// Poll 阶段：执行一定数量的文件的 data 回调、网络的 connection 回调，太多的话留到下次执行。如果没有 IO 回调并且也没有 timers、check 阶段的回调要处理，就阻塞在这里等待 IO 事件
+// 微任务：执行所有 nextTick 的微任务，再执行其他的普通微任务
+// Check 阶段：执行一定数量的 setImmediate 的 callback，太多的话留到下次执行。
+// 微任务：执行所有 nextTick 的微任务，再执行其他的普通微任务
+// Close 阶段：执行一定数量的 close 事件的 callback，太多的话留到下次执行。
+// 微任务：执行所有 nextTick 的微任务，再执行其他的普通微任务
+
+
+
+// node: 执行完一定数量的 Timers 宏任务，再去执行所有微任务，
+// 然后再执行一定数量的 Pending 的宏任务，然后再去执行所有微任务，
+// 剩余的 Poll、Check、Close 的宏任务也是这样。
+// （订正：node 11 之前是这样，node 11 之后改为了每个宏任务都执行所有微任务了）
+
+// 区别：
+{/* < node11 执行完一个阶段的所有宏任务，在执行所有微任务 */}
+{/* >= node11 执行完一个阶段的一个宏任务，在执行所有微任务，然后在执行这个阶段的下个宏任务 */}
+
+
+// ![nodeEventLoop](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c339677674834430a5c329447697af1a~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp?)
+// ![浏览器](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4385d6b018174a57ac46c3fcd8f3d264~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp?)
+
+// 参考链接 [浏览器和 Node.js 的 EventLoop 为什么这么设计？](https://juejin.cn/post/7049385716765163534#heading-0)
+
 // 第十三题
 function test(a, b) {
   console.log(a);
@@ -270,5 +301,93 @@ test(1);
 // 解析：根据函数预编译的四步
 
 
+
+
+
+// let i = 0;
+// let j = 1;
+// const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+// [arr[i++], arr[j++]] = [arr[j++], arr[i++]];
+// console.log(arr)
+
+
+// // 解析
+// [arr[i++], arr[j++]] = [arr[1], arr[0]]
+// [arr[i++], arr[j++]] = [1, 0]
+// [arr[1], arr[2]] = [1, 0]
+
+
+
+// 第十四题
+// 1. 类上的方法是定义在什么位置？ （箭头函数/普通函数/静态方法）
+// * 普通函数: 挂函数的原型上
+Object.defineProperty(Constructor.prototype, 'functionName', functionInfo);
+// * 箭头函数: 作为this的属性
+// 简化：
+Object.defineProperty(this, 'functionName', functionInfo);
+// * 静态方法: 作为函数的属性
+// 简化：
+Object.defineProperty(Constructor, 'functionName', functionInfo);
+
+
+
+// 斐波那契数列
+// 利用 for...of、扩展运算符（...）、解构赋值和Array.from方法内部调用的，都是遍历器接口
+function* fibonacci(n) {
+  let [prev, curr] = [0, 1];
+  for (;;) {
+    yield curr; n--;   if(n === 0) {break;}
+    [prev, curr] = [curr, prev + curr];
+  }
+}
+
+const fibArr = [...fibonacci(5)];
+
+/**
+ *
+Generator 与上下文
+
+JavaScript 代码运行时，会产生一个全局的上下文环境（context，又称运行环境），包含了当前所有的变量和对象。然后，执行函数（或块级代码）的时候，又会在当前上下文环境的上层，产生一个函数运行的上下文，变成当前（active）的上下文，由此形成一个上下文环境的堆栈（context stack）。
+
+这个堆栈是“后进先出”的数据结构，最后产生的上下文环境首先执行完成，退出堆栈，然后再执行完成它下层的上下文，直至所有代码执行完成，堆栈清空。
+
+Generator 函数不是这样，它执行产生的上下文环境，一旦遇到yield命令，就会暂时退出堆栈，但是并不消失，里面的所有变量和对象会冻结在当前状态。等到对它执行next命令时，这个上下文环境又会重新加入调用栈，冻结的变量和对象恢复执行。
+*/
+
+
+function a () {
+  try {
+    throw new Error(111)
+  } catch (error) {
+    console.log(1)
+  }
+  console.log(2)
+}
+
+
+setTimeout(()=> {
+  console.log(1);
+  Promise.resolve().then(() => {
+    console.log(2);
+  })
+}, 0);
+setTimeout(()=> {
+  console.log(3);
+  Promise.resolve().then(() => {
+    console.log(4);
+  })
+}, 0);
+
+let time = Date.now();
+let objStr = 'return {';
+new Array(10000).fill(1).forEach((item, index) => {
+  const keyStr = `${item}*${index}*${index}`;
+  objStr = objStr + `"${keyStr}":${keyStr},`;
+});
+objStr = objStr + '}';
+
+const obj = new Function(`${objStr}`)();
+Date.now() - time;
 
 

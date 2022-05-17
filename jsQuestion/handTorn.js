@@ -12,6 +12,7 @@
 // call: 改变方法内部this的指向，指向第一个参数，后面的参数是正常传的实参
 // 1. context为 null 或 undefined 时会自动替换为指向全局对象(严格模式下为 undefined)，原始值会被包装
 
+// 利用 普通情况下，谁调用，this指向谁，将fn作为obj的一个属性，实现
 Function.prototype.myCall = function (context, ...rest) {
   context = context === undefined || context === null ? window : Object(context);
 
@@ -64,6 +65,9 @@ Function.prototype.myBind = function (context, ...arg) {
 
   const newFn = function (..._arg) {
     const target = this instanceof F ? this : context;
+    // 如果是作为构造函数 new使用，this instanceof F 一定是true, 因为new 时，构造函数内部会生成一个this
+    // 如果是普通使用, this 就会指向 window || undefined
+
     // target 的处理是为了实现第四点：
     return oldFn.call(target, ...arg, ..._arg);
   };
@@ -156,6 +160,20 @@ function instanceof1(obj, constructer) {
 function instanceof2(obj, constructer) {
   return constructer.prototype.isPrototypeOf(obj);
 }
+
+function instanceof3(obj, constructer) {
+  // 对象的Symbol.hasInstance属性，指向一个内部方法。当其他对象使用instanceof运算符，判断是否为该对象的实例时，会调用这个方法
+  return constructer[Symbol.hasInstance](obj);
+}
+
+// 验证
+const Even = {
+  [Symbol.hasInstance](obj) {
+    return 111;
+  },
+};
+
+// 1 instanceof Even;
 
 /** * --------------- 分割线 --------------- ** */
 
