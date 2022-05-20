@@ -19,3 +19,17 @@
   * 
   * 
   * 触发条件：  浮动 定位 overflow
+
+## 回流 和 重绘？
+  - 回流:
+    - render tree 中的一些元素的尺寸、布局发生变化时需要重新计算布局信息; border margin padding width height
+  - 重绘:
+    - render tree 中的一些元素 需要更新，但是不会影响到布局信息， 比如 改变透明度、平移、颜色
+  - 回流一定发生重绘
+
+## 隐藏一个dom的方式？
+  - display: none 回流 + 重绘
+  - visibility: hidden; 重绘
+  - opacity: 0; 重绘
+  - z-index: n; 利用层级，被遮盖，隐藏  回流、重绘
+  

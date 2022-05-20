@@ -32,3 +32,73 @@
       - 只是停留在代码的静态分析层面，没有从语义上分析模块导出值是不是真的被有效使用;
       - 比如模块A 导入了模块B中的变量B1，并赋值给了A1，但是A1没有使用，这种既不会被 tree shaking 优化; 
 
+
+
+## Webpack 性能优化
+  - 减少打包时间
+    - Loader:
+      - 限定文件的搜索范围
+    - 将 Babel 编译过的文件缓存
+      - `loader: 'babel-loader?cacheDirectory=true'`
+    - HappyPack
+       - HappyPack 可以将 Loader 的同步执行转换为并行
+      ```json
+        {
+          module: {
+            loaders: [
+              {
+                test: /\.js$/,
+                include: [resolve('src')],
+                exclude: /node_modules/,
+                // id 后面的内容对应下面
+                loader: 'happypack/loader?id=happybabel'
+              }
+            ]
+          },
+          plugins: [
+            new HappyPack({
+              id: 'happybabel',
+              loaders: ['babel-loader?cacheDirectory'],
+              // 开启 4 个线程
+              threads: 4
+            })
+          ]
+        }
+        ```
+  - 打出来的包更小
+    - 代码压缩
+      - Webpack3: 
+        - 使用 webpack-parallel-uglify-plugin 并行运行 UglifyJS
+        - terser 压缩支持 es6, UglifyJS 不支持es6
+      - Webpack4:
+        - mode 设置为 production, 默认开启压缩
+    - 按需加载
+      - 将每个路由页面单独打包为一个文件
+    - Scope Hoisting  斯口铺 黑丝停
+      - 可以分析出模块之间的依赖关系，尽可能的把打包出来的模块合并到一个函数中去
+      - Webpack4: 
+      ```js
+        module.exports = {
+          optimization: {
+            concatenateModules: true
+          }
+        }
+      ```
+    - Tree Shaking
+      - 删除项目中未被引用的代码;
+        - Webpack 4: 开启生产环境就会自动启动这个优化功能
+
+
+## 常用 loader 或 plugins
+  - babel-loader: 把 ES6 转换成 ES5
+  - css-loader：加载 CSS，支持模块化、压缩、文件导入等特性
+  - style-loader：把 CSS 代码注入到 JavaScript 中，通过 DOM 操作去加载 CSS
+  - source-map-loader：加载额外的 Source Map 文件，以方便断点调试
+
+  - html-webpack-plugin：简化 HTML 文件创建, 依赖于 html-loader
+  - terser-webpack-plugin: 支持压缩 ES6 (Webpack4)
+  - webpack-bundle-analyzer: 可视化 Webpack 输出文件的体积 (业务组件、依赖第三方模块)
+
+  - webpack-merge：提取公共配置，减少重复配置代码
+
+##  Webpack 的热更新原理

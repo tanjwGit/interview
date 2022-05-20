@@ -65,6 +65,76 @@
 <span id = "jump16.1">[跳转](#jump16.2)</span>
 <br />
 
+### 平时是怎么学习前端的？
+  - 阅读官方文档;
+  - 浏览 github 仓库 内的 issues [ˈɪʃu] 以修斯: 问题、争论;
+  - 看 MDN 上的解释;
+  - 拜读社区内一些大佬的文章;
+  - 记录总结自己遇到的一些问题;
+
+
+### 实现 0.5px ?
+  - 伪元素+transform
+  ```css
+  .scale-1px {
+    position: relative;
+    border: none;
+  }
+  .scale-1px:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    background: #000;
+    width: 100%;
+    height: 1px;
+    /*核心是利用transform缩放边框*/
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+  }
+  ```
+
+### css 单位？
+  - em:
+    - fontSize: 相对于父元素 的字体大小
+    - 其他属性: 相对于自身的字体大小
+  - rem:
+    - 相对于根元素的字体大小, 1rem === 根元素fontSize的1倍
+    - 比如 375 px, 如果需要 1rem === 10px, 
+      - 那么 375px = 375/10 = 37.5rem
+      - 10px = 1rem;
+      - 12px = 1.2rem
+    - (屏幕宽度 / 750) * 36 + 'px'
+      - 在375 屏幕下, 18px
+      - 1rem = 18px
+      - 10px = 18 / x;  x = 1.8rem;
+  - lh:
+    - 相对于元素的line-height
+  - vw:
+    - 1vw === 视口宽度的 1%
+  - vh:
+    - 1vh === 视口高度的 1%
+  - vmin:
+    - 1vmin === 视口高度或宽度中较小值的1%
+  - vmax:
+    - 1vmax === 视口高度或宽度中较大值的1%
+  - 百分比:
+    - fontSize 设置为百分比，就是父元素fontSize 的百分比
+    - width 设置为百分比，就是父元素 width 的百分比
+  
+
+### localStorage 变化能不能被监听到？
+  - LocalStorage 变化时，会触发storage事件
+  - 调用 window.localStorage.setItem() 更改 LocalStorage
+
+### js 判断运行环境？ 比如浏览器、 端内webView h5、小程序？
+  -  window.navigator.userAgent
+    - 声明了浏览器用于 HTTP 请求的用户代理头的值，可以提取该条信息中的一些特殊地 值
+
+### 如何做好垃圾回收?
+  - 尽量少使用全局变量， 会被放入 老生代中
+    - 老生代 清理垃圾时 耗时长
 
 
 
@@ -190,11 +260,30 @@
 
 ### 闭包有什么作用
 <span id = "jump2.2">[跳转](#jump2.1)</span>
+
+  - 私有变量
+  - 单例模式
+  - 克里化
+
 <br />
 
 ### 什么会导致内存泄漏?
 <span id = "jump3.2">[跳转](#jump3.1)</span>
 <br />
+
+- 内存泄露（Memory Leaks）：是指应用程序已经不再需要的内存，由于某种原因未返回给操作系统或者空闲内存池（Pool of Free Memory）。
+
+- 内存泄露可能带来的问题：变慢、卡顿、高延迟
+- 闭包
+- 循环引用
+- 全局变量引起的内存泄露
+- 没有清理的 DOM 元素引用
+- 被遗忘的定时器或者回调
+
+- 如何分析？
+  - Chrome内存分析工具
+    - Performance
+    - Memory
 
 ### this.setState 发生了什么？
 <span id = "jump4.2">[跳转](#jump4.1)</span>
@@ -265,8 +354,6 @@
 ### vue-route、react-route 路由原理?
 <span id = "jump16.2">[跳转](#jump15.1)</span>
 <br />
-
-
 
 
 
