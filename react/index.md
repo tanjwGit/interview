@@ -169,6 +169,22 @@
     - 调用触发更新的 `this.setState` 的回调函数
     - 调用ReactDOM.render的第三个参数回调函数;
 
+
+
+<!-- | 特性 | cookie | localStorage | sessionStorage | indexDB |  -->
+<!-- | ---- | ---- | ---- | ---- | ---- | -->
+
+|           |       Mount        |    update    |    unmount    |    Error    |  
+| -- | -- | -- | -- | -- |
+| render 阶段 | constructor | componentWillReceiveProps | - | -|
+|   | getDerivedStateFromProps | getDerivedStateFromProps | - | getDerivedStateFromError |
+|   | - |shouldComponentUpdate | - | -|
+|   | componentWillMount | componentWillUpdate | - | -|
+|   | render | render | - | -|
+| commit 阶段  |   | getSnapshotBeforeUpdate | - | -|
+|   | componentDidMount | componentDidUpdate | componentWillUnmout | componentDidCatch |
+
+
 ## Diff 算法？
  - 只比较同级节点, 不考虑跨层级的节点复用;
  - 两个不同类型的元素产生出不同的树; (即使新旧两个父节点不同，父节点内的子节点相同，也认为是两个不同的树，整颗树销毁并新建)

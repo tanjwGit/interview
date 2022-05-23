@@ -74,6 +74,7 @@
 
 
 ### 实现 0.5px ?
+  - 两种方案都跟dpr有关
   - 伪元素+transform
   ```css
   .scale-1px {
@@ -94,12 +95,23 @@
     transform-origin: 0 0;
   }
   ```
+  - 改变meta标签中initial-scale 为 1/dpr, 配合rem使用;
+    ```html
+      <meta
+        name='viewport'
+        content='
+          width=device-width,
+          initial-scale=1.0 // 改变此值
+        '
+      />
+    ```
 
 ### css 单位？
   - em:
     - fontSize: 相对于父元素 的字体大小
     - 其他属性: 相对于自身的字体大小
   - rem:
+    - 一般将 fontSize 设置为 clientWidth与设计稿宽度的比值,
     - 相对于根元素的字体大小, 1rem === 根元素fontSize的1倍
     - 比如 375 px, 如果需要 1rem === 10px, 
       - 那么 375px = 375/10 = 37.5rem
@@ -186,7 +198,101 @@
 
 
 
+### ts 的高级类型？
+  - 交叉类型 &
+  - 联合类型 ｜
+  - 类型断言 as
+  - 类型别名 type
+  - 枚举成员类型
+  - 索引类型 keyof
+    ```ts
+      interface Map<T> {
+        [key: string]: T;
+      }
+    ```
 
+### useEffect useLayoutEffect 的区别？
+
+### useEffect 可以代替 componentShouldUpdate吗？
+
+
+### react 现有 api 实现 redux?
+  - React.createContext
+    - 共享一个全局的状态
+  - React.useReducer
+    - 接受一个  reducer, 返回当前state,和配套的dispatch
+  - useContext
+    - 接收一个 context 对象（React.createContext 的返回值）并返回该 context 的当前值
+    -  缺点: 触发本组件的重渲染,  不受制于 shouldComponentUpdate
+  - Context 和 useReducer 结合
+
+    ```jsx
+      // store.js
+      const initState = {
+        count: 0,
+        text: '',
+      };
+      const reducer = (state, action) => {
+        const { type, payload } = action;
+        switch (type) {
+          case 'add':
+            return { ...state, count: state.count + 1 };
+          case 'minus':
+            return { ...state, count: state.count - 1 };
+          case 'change-text':
+            return { ...state, ...payload };
+          default:
+            return state;
+        }
+      };
+
+      export const Store = createContext(null);
+
+      const Provider = (props) => {
+        const [state, dispatch] = useReducer(reducer, initState);
+        return (
+          <Store.Provider value={{ state, dispatch }}>
+            {props.children}
+          </Store.Provider>
+        );
+      };
+
+      export default Provider;
+
+    ```
+
+    ```jsx
+      // 根组件使用
+      ReactDOM.render(
+        <Provider>
+          <App />
+        </Provider>,
+        document.getElementById('root')
+      );
+    ```
+
+    ```jsx
+      // 自组件使用
+      function App() {
+        const { dispatch, state } = useContext(Store);
+
+          const add = () => {
+            dispatch({ type: 'add' });
+          };
+
+        return (
+          <div>
+            <button onClick={add}>Add</button>
+          </div>
+        );
+      }
+    ```
+
+
+### redis 存储，使用什么类型比较好？ 哈希、map、list
+
+
+### 怎么实现一个购物车？
 
 
 <br />
