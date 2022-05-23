@@ -119,3 +119,32 @@ Array.prototype.selectSort = function () {
   return arr;
 };
 console.log('选择排序::', [...randomArr].selectSort().join(' '));
+
+/**
+ * 快速排序
+ * 思想:
+ * 选择一个基准值， 小的放左边， 大的放右边
+ * 递归下去，直到这个数组只有一个元素，或者没有元素
+*/
+function quickSort(arr = []) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+  const baseItem = arr[0];
+  const left = [];
+  const right = [];
+  for (let i = 1; i < arr.length; i++) {
+    const item = arr[i];
+    if (item < baseItem) {
+      left.push(item);
+    } else {
+      right.push(item);
+    }
+  }
+  return [...quickSort(left), baseItem, ...quickSort(right)];
+}
+
+Array.prototype.quickSort = function () {
+  const array = this;
+  return quickSort(array);
+};
