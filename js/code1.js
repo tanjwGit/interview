@@ -140,4 +140,60 @@ function flat2(array, num) {
 // TODO
 
 // 如何实现一个 LazyMan？
-https://juejin.cn/post/6844903791188246541
+// https://juejin.cn/post/6844903791188246541
+
+class LazyMan {
+  constructor(name) {
+    this.name = name;
+    this.eventLoop = [];
+    this.ing = false;
+  }
+
+  exec = () => {
+    console.log('tack', this.ing);
+    if (!this.ing && this.eventLoop.length > 0) {
+      const task = this.eventLoop.shift();
+      this.ing = true;
+      task(() => {
+        this.ing = false;
+        this.exec();
+      });
+    }
+  };
+
+  sleep(time) {
+    const fn = (next) => {
+      console.log(`休息${time}毫秒`);
+      setTimeout(() => {
+        console.log(`休息${time}毫秒结束`);
+        next();
+      }, time);
+    };
+    this.eventLoop.push(fn);
+    this.exec();
+    return this;
+  }
+
+  sleepFirst(time) {
+    const fn = (next) => {
+      console.log(`休息${time}毫秒`);
+      setTimeout(() => {
+        console.log(`休息${time}毫秒结束`);
+        next();
+      }, time);
+    };
+    this.eventLoop.unshift(fn);
+    this.exec();
+    return this;
+  }
+
+  eat = (str) => {
+    const fn = (next) => {
+      console.log(`吃${str}`);
+      next();
+    };
+    this.eventLoop.push(fn);
+    this.exec();
+    return this;
+  };
+}

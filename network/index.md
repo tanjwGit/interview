@@ -195,8 +195,8 @@
     - ETag 和 If-None-Match: http/1.1, 解决了Last-modified的问题;
       Etag 类似于文件指纹, If-None-Match 会将Etag发给服务器, 询问Etag是否有变动, 优先级比 last-Modified高;
   - 实际场景: 
-    频繁变动的资源: Cache-Control: no-cache, 使浏览器每次都请求服务器, 配合ETag 或者 Last-Modified 来验证资源是否有效；
-    代码文件: 对打包出的文件名进行哈希处理, Cache-Control: max-age=31536000（设置一个较长的有效期）, 只有当 HTML 文件中引入的文件名发生了改变才会去下载最新的代码文件, 否则就一直使用缓存。
+      - 频繁变动的资源: Cache-Control: no-cache, 使浏览器每次都请求服务器, 配合ETag 或者 Last-Modified 来验证资源是否有效；
+      - 代码文件: 对打包出的文件名进行哈希处理, Cache-Control: max-age=31536000（设置一个较长的有效期）, 只有当 HTML 文件中引入的文件名发生了改变才会去下载最新的代码文件, 否则就一直使用缓存。
 
 
 
