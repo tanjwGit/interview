@@ -1,3 +1,5 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable max-classes-per-file */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
 
@@ -195,5 +197,30 @@ class LazyMan {
     this.eventLoop.push(fn);
     this.exec();
     return this;
+  };
+}
+
+function eventLoop(n) {
+  const list = [];
+  let ingCount = 0;
+  const exec = () => {
+    for (let i = 0; i < n; i++) {
+      if (ingCount < n && list.length > 0) {
+        ingCount++;
+        const task = list.shift();
+        setTimeout(() => {
+          ingCount--;
+          exec();
+        }, 0);
+        // task().then(() => {
+        //   ingCount--;
+        //   exec();
+        // });
+      }
+    }
+  };
+  return (task, num) => {
+    list.push([task, num]);
+    exec();
   };
 }

@@ -70,3 +70,8 @@
   - absolute
   - fixed
   - sticky
+
+  - process.nextTick
+  - MutaionObserver
+
+  - requestAnimationFrame

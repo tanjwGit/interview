@@ -211,9 +211,35 @@
       }
     ```
 
+### Required 实现？
+
+###  unknown any 的区别？
+
+### 如何判断类型 安全？
+
 ### useEffect useLayoutEffect 的区别？
 
 ### useEffect 可以代替 componentShouldUpdate吗？
+
+
+### 哪些是微任务？哪些是宏任务？
+  - 宏任务
+    - setTimeout
+    - setInterval
+    - setImmediate
+    - `<script>`标签中的运行代码
+    - 事件触发的回调函数
+    - I/O
+    - UI 交互
+    - requestAnimationFrame
+  - 微任务
+    - Promise
+    - process.nextTick
+    - MutationObserver
+### 浏览器UI刷新 是在 微任务后 还是宏任务后？
+  1. 执行微任务
+  2. 执行渲染操作
+  3. 执行宏任务
 
 
 ### react 现有 api 实现 redux?
