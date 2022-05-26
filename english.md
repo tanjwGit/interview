@@ -72,6 +72,12 @@
   - sticky
 
   - process.nextTick
+
   - MutaionObserver
 
   - requestAnimationFrame
+
+  - pm2 describe app
+  - pm2 monit
+  - deploy.yaml
+  - pm2 deploy deploy.yaml production setup
