@@ -195,8 +195,40 @@
   - 单节点
   - 多节点
     - 多节点，基于大多数操作，更新组件的概率更高的原因，diff分为两步
-      - 第一轮遍历: 处理更新的节点: 其实是顺序不变的更新的节点，顺序变化的，也会放在第二轮处理;
+      - 比较的是 新的 newChildren数组 和 旧的fiber链表, 所以只能从头遍历
+      - 第一轮遍历: 只处理更新的节点: 其实是顺序不变的更新的节点，顺序变化的，也会放在第二轮处理;
+        - 第一轮遍历 不能复用的两种情况
+          - key 不同，导致不能复用，跳出整个遍历，第一轮遍历结束
+          - key 相同，type 不同，oldFilber 标记为 deletion, 并继续遍历;
+        - 如果提前跳出了遍历 或者 newChildren 或 oldFilber 遍历结束，都会是第一轮遍历结束
       - 第二轮遍历: 处理剩下的不属于更新的节点(新增、删除、移动)
+        - 第一轮遍历会有两种情况
+          - 情况一: 中途跳出遍历，导致 newChildren 和 oldFilber 都没有遍历完;
+            - 不能继续使用 索引 对比前后节点了，使用 key
+            1. 将 剩余的 oldFilber 存入 map, 以 key 为 map 的key
+            2. 遍历newChildren, 用其key 找到 map 中的fiber;
+            - 遍历节点是否移动？
+              - 以最后一个可复用的节点在oldFiber 中的索引 为参照物;
+              - 以例子说明: [DEMO1](https://react.iamkasong.com/diff/multi.html#demo1)
+                ```js
+                  // 之前 abcd
+                  // 之后 acdb
+                  // acd 不变, b 右移
+
+                  // 之前
+                  // abcd
+
+                  // 之后
+                  // dabc
+                  // d 不变, abc右移
+                ```
+          - 情况二:  newChildren 或 oldFilber 中的一个，或者都遍历完
+            - 都遍历完
+              - 最理想的情况，第一次遍历处理了所有diff  结束
+            - 仅 newChildren 没有遍历完
+              - 遍历剩下的 newChildren，生成fiber 节点，并标记为 Placement
+            - 仅 oldFilber 没有遍历完
+              - 遍历剩下的oldFiber，依次标记Deletion
 
 ## 优先级的调度？
 
