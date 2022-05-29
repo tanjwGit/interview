@@ -32,7 +32,7 @@ class Select {
       ...item,
       integral: 0,
     }));
-    this.currentShareList = fn(this.currentShareList);
+    // this.currentShareList = fn(this.currentShareList);
     this.lastShareList = fn(this.lastShareList);
   };
 

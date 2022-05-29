@@ -49,6 +49,11 @@ type Pick<T, K extends keyof T> = {
 }
 
 
+type Exclude<T, U> = T extends U ? never : T;
+
+
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+
 type A = {
   [key: string]: number
 }
