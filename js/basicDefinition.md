@@ -172,7 +172,9 @@ for (var j = 0; j < 10; j++) {
 取消冒泡：event.stopPropagation(); (ie: event.cancelBubble = true;)
 
 ## 事件委托
-利用事件源 和 事件冒泡 进行处理
+  - 利用事件源 和 事件冒泡 进行处理
+  - 减少事件注册，节省内存
+  - 简化了dom节点更新时，相应事件的更新。比如不用在新添加的li上绑定click事件。当删除某个li时，不用移解绑上面的click事件
 
 ## 异步加载js
 常规情况下，js加载为同步加载，会阻断 HTML\CSS加载；

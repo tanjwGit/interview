@@ -211,9 +211,35 @@
       }
     ```
 
+### Required 实现？
+
+###  unknown any 的区别？
+
+### 如何判断类型 安全？
+
 ### useEffect useLayoutEffect 的区别？
 
 ### useEffect 可以代替 componentShouldUpdate吗？
+
+
+### 哪些是微任务？哪些是宏任务？
+  - 宏任务
+    - setTimeout
+    - setInterval
+    - setImmediate
+    - `<script>`标签中的运行代码
+    - 事件触发的回调函数
+    - I/O
+    - UI 交互
+    - requestAnimationFrame
+  - 微任务
+    - Promise
+    - process.nextTick
+    - MutationObserver
+### 浏览器UI刷新 是在 微任务后 还是宏任务后？
+  1. 执行微任务
+  2. 执行渲染操作
+  3. 执行宏任务
 
 
 ### react 现有 api 实现 redux?
@@ -293,6 +319,43 @@
 
 
 ### 怎么实现一个购物车？
+
+
+### 缓存？
+
+### hash 的作用、加密？
+  - 为了验证原始数据是否被篡改
+
+### 传输的数据压缩？
+
+
+### cookie? 识别用户
+
+
+### css 定位？
+
+
+### https 证书的作用？
+  - 使浏览器得到可信的 服务器 公钥，并传递给服务器 自己生成的密钥;
+
+
+### 编码格式？？
+
+
+### 帧 与 eventLoop 的关系？
+
+### 二进制？
+  - 0b0101010101
+
+### redis 与 mySql 的区别？
+  - redis
+    - 数据在内存当中
+    - 数据的生命周期不宜太久
+    - redis是单线程
+  - mySql
+    - 
+
+### express 与 koa 的区别？
 
 
 <br />
@@ -437,10 +500,16 @@
 <span id = "jump11.2">[跳转](#jump11.1)</span>
   - 确定好对外的props, 不暴露无关的
   - 可维护性;
-  - 与业务逻辑解耦
-  - 组件文档与demo
-  - 模块化
+  - 与业务逻辑解耦;
+  - 组件文档与demo;
+  - 模块化;
 <br />
+
+### 写 npm 包需要考虑什么？
+  - 示例代码
+  - readme 或 文档说明
+  - package.json
+  - 版本升级间的兼容性
 
 ### 深拷贝，浅拷贝？ 
 <span id = "jump12.2">[跳转](#jump12.1)</span>
@@ -462,18 +531,3 @@
 <span id = "jump16.2">[跳转](#jump15.1)</span>
 <br />
 
-
-
-### hash 的作用？
-
-
-### 缓存？
-
-
-### cookie? 识别用户
-
-
-### css 定位？
-
-
-### https 证书的作用？

@@ -51,11 +51,12 @@ var MyLinkedList = function() {
  * @return {number}
  */
 MyLinkedList.prototype.get = function(index) {
-    let currentNode = this.dummyHead.next;
 
     if(index < 0 || (index > (this.size - 1))) {
         return -1;
     }
+
+    let currentNode = this.dummyHead.next;
 
     while(index > 0) {
         currentNode = currentNode.next;
@@ -69,11 +70,9 @@ MyLinkedList.prototype.get = function(index) {
  * @return {void}
  */
 MyLinkedList.prototype.addAtHead = function(val) {
-    const newNode = new ListNode(val, undefined);
     const nextNode = this.dummyHead.next;
+    const newNode = new ListNode(val, nextNode);
     this.dummyHead.next = newNode;
-    newNode.next = nextNode;
-
     this.size = this.size + 1;
 };
 
@@ -82,12 +81,11 @@ MyLinkedList.prototype.addAtHead = function(val) {
  * @return {void}
  */
 MyLinkedList.prototype.addAtTail = function(val) {
-    const newNode = new ListNode(val, undefined);
     let currentNode = this.dummyHead;
     while(currentNode.next) {
         currentNode = currentNode.next;
     }
-    currentNode.next = newNode;
+    currentNode.next = new ListNode(val, undefined);
     this.size = this.size + 1;
 };
 
@@ -110,10 +108,9 @@ MyLinkedList.prototype.addAtIndex = function(index, val) {
         currentNode = currentNode.next;
         index --;
     }
-
-    const newNode = new ListNode(val, undefined);
     const nextNode = currentNode.next;
-    newNode.next = nextNode;
+    const newNode = new ListNode(val, nextNode);
+
     currentNode.next = newNode;
 
     this.size = this.size + 1;
@@ -287,8 +284,11 @@ var getIntersectionNode = function(headA, headB) {
 * 快慢指针法，快指针走两步，慢指针走一步
 > 因为如果有环，快指针一定先进入环内，慢指针后进入，相对于慢指针来说，快指针是一个节点一个节点靠近慢指针的，所以一定会重
 
+<center>
+
 ![示意图](https://tva1.sinaimg.cn/large/008eGmZEly1goo4xglk9yg30fs0b6u0x.gif)
 
+</center>
 <br/>
 
 #### 寻找环的入口

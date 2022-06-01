@@ -1,3 +1,5 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable max-classes-per-file */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
 
@@ -140,4 +142,85 @@ function flat2(array, num) {
 // TODO
 
 // 如何实现一个 LazyMan？
-https://juejin.cn/post/6844903791188246541
+// https://juejin.cn/post/6844903791188246541
+
+class LazyMan {
+  constructor(name) {
+    this.name = name;
+    this.eventLoop = [];
+    this.ing = false;
+  }
+
+  exec = () => {
+    console.log('tack', this.ing);
+    if (!this.ing && this.eventLoop.length > 0) {
+      const task = this.eventLoop.shift();
+      this.ing = true;
+      task(() => {
+        this.ing = false;
+        this.exec();
+      });
+    }
+  };
+
+  sleep(time) {
+    const fn = (next) => {
+      console.log(`休息${time}毫秒`);
+      setTimeout(() => {
+        console.log(`休息${time}毫秒结束`);
+        next();
+      }, time);
+    };
+    this.eventLoop.push(fn);
+    this.exec();
+    return this;
+  }
+
+  sleepFirst(time) {
+    const fn = (next) => {
+      console.log(`休息${time}毫秒`);
+      setTimeout(() => {
+        console.log(`休息${time}毫秒结束`);
+        next();
+      }, time);
+    };
+    this.eventLoop.unshift(fn);
+    this.exec();
+    return this;
+  }
+
+  eat = (str) => {
+    const fn = (next) => {
+      console.log(`吃${str}`);
+      next();
+    };
+    this.eventLoop.push(fn);
+    this.exec();
+    return this;
+  };
+}
+
+function eventLoop(n) {
+  const list = [];
+  let ingCount = 0;
+  const exec = () => {
+    for (let i = 0; i < n; i++) {
+      if (ingCount < n && list.length > 0) {
+        ingCount++;
+        const task = list.shift();
+        setTimeout(() => {
+          ingCount--;
+          exec();
+        }, 0);
+        // task().then(() => {
+        //   ingCount--;
+        //   exec();
+        // });
+      }
+    }
+  };
+  return (task, num) => {
+    list.push([task, num]);
+    exec();
+  };
+}
