@@ -91,7 +91,6 @@ function inherit(Origin, Target) {
 }
 
 /** * --------------- 分割线 --------------- ** */
-
 // new 的实现
 /**
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new#description

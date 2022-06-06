@@ -140,6 +140,11 @@
   - LocalStorage 变化时，会触发storage事件
   - 调用 window.localStorage.setItem() 更改 LocalStorage
 
+  - localStorage.getItem()读取数据的时间是不可预测的。此外，这是一个阻塞型方法，浏览器会停止处理页面直到数据从磁盘中读出
+
+  - 隐私模式下，不可读取;
+
+
 ### js 判断运行环境？ 比如浏览器、 端内webView h5、小程序？
   -  window.navigator.userAgent
     - 声明了浏览器用于 HTTP 请求的用户代理头的值，可以提取该条信息中的一些特殊地 值
@@ -357,6 +362,30 @@
 
 ### express 与 koa 的区别？
 
+
+
+### 浏览器的 进程 与 线程？
+<!-- https://juejin.cn/post/6844903553795014663 -->
+
+
+
+### Promise.all 的实现？
+
+
+### 使用正则 校验钱的千分符格式 如 1,111,222.00或1.01或100，小数点后最多两位
+
+### ?? 与 ?. 的区别？
+  - ??
+    - null 或者 undefined, 就使用 ?? 后面的值
+
+
+### Object 的key 的访问顺序？
+ -  如： Object.keys({b:'b',a:'a', 2:2, 1:1})
+
+### 判断类型的方式？
+  - typeof
+  - instanceof
+  - toString: Object.prototype.toString.call
 
 <br />
 <br />
