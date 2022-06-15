@@ -149,54 +149,41 @@ function minSubArrayLen(s, nums) {
   return result;
 }
 
+// 59.螺旋矩阵II
 function generateMatrix(n) {
-  const arr = new Array(n).fill(0).map(() => new Array(n));
-
-  let loopCount = Math.floor(n / 2);
-
-  let i = 0;
-  let j = 0;
-
+  const arr = new Array(n).fill(0).map(() => ([]));
+  let loop = Math.floor(n / 2);
   let startX = 0;
   let startY = 0;
-
   let endIndex = n - 1;
   let num = 1;
-
-  while (loopCount > 0) {
-    i = startX;
-    j = startY;
+  while (loop > 0) {
+    let i = startX;
+    let j = startY;
     // i 和 j 此时是下标
     // endIndex 是 这条边 能填充的最末尾的下标
 
-    for (; j < endIndex; j++) {
-      arr[i][j] = num;
-      num++;
-    }
-
     for (; i < endIndex; i++) {
-      arr[i][j] = num;
-      num++;
+      arr[j][i] = num++;
     }
 
-    for (; j > startY; j--) {
-      // 回到起点前
-      arr[i][j] = num;
-      num++;
+    for (; j < endIndex; j++) {
+      arr[j][i] = num++;
     }
 
     for (; i > startX; i--) {
-      arr[i][j] = num;
-      num++;
+      arr[j][i] = num++;
     }
 
-    endIndex -= 1;
-    startX += 1;
-    startY += 1;
-    loopCount--;
+    for (; j > startY; j--) {
+      arr[j][i] = num++;
+    }
+    loop--;
+    endIndex--;
+    startX++;
+    startY++;
   }
-
-  if ((n % 2) !== 0) {
+  if (n % 2 !== 0) {
     const middleIndex = Math.floor(n / 2);
     arr[middleIndex][middleIndex] = num;
   }

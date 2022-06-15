@@ -387,6 +387,26 @@
   - instanceof
   - toString: Object.prototype.toString.call
 
+### 如何操作 cookie ? 与cookie有关的标识？
+
+### transform 的劣势？
+  - 开启GPU硬件加速，提高了性能，但是可能会增加耗电
+  - 层爆炸, 可能导致产生大量不在预期内的合成层,浏览器虽然有层压缩，但也有很多无法压缩的情况；
+    - 很多不需要提升为合成层的元素因为某些不当操作成为了合成层;
+    - 解决层爆炸
+      - 让其他元素不要和合成层元素重叠
+      - 使用 3D 硬件加速提升动画性能时，最好给元素增加一个 z-index 属性，人为干扰合成的排序，可以有效减少创建不必要的合成层，提升渲染性能，移动端优化效果尤为明显
+
+
+### 浏览器中实现动画的方式？
+  - js canvas
+  - css
+    - transition 过渡
+    - animation 动画 keyframes
+  - js
+    - setTimeout setInterval
+    - requestAnimationFrame
+
 <br />
 <br />
 <br />

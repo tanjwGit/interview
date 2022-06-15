@@ -30,7 +30,23 @@
   - 实践
     - 在实际的优化效果并不如 Tree Shaking 原本设想的那么完美;
       - 只是停留在代码的静态分析层面，没有从语义上分析模块导出值是不是真的被有效使用;
-      - 比如模块A 导入了模块B中的变量B1，并赋值给了A1，但是A1没有使用，这种既不会被 tree shaking 优化; 
+      - 比如模块A 导入了模块B中的变量B1，并赋值给了A1，但是A1没有使用，这种既不会被 tree shaking 优化;
+
+  - 要注意的细节:
+    - 不要让babel在转义为ES5时改变源码中ESM的模块导入导出语法;
+    - 对于有副作用的模块，需要在package.json中的“sideEffects”字段进行标记
+      - 示例
+        ```json
+          {
+            "name": "your-project",
+            "sideEffects": false
+          }
+        ```
+      - 取值
+        - `false`: 所有代码都不包含副作用, 将属性标记为false以通知 webpack 它可以安全地修剪未使用的导出
+          - “副作用”定义为在导入时执行特殊行为的代码，而不是暴露一个或多个导出。这方面的一个例子是 polyfill，它影响全局范围并且通常不提供导出
+        - ['xxxx.js', 'xxxxx.js', '*.css'] 部分文件存在一些副作用
+      - sideEffects也可以在 module.rules 配置选项中进行设置。
 
 
 
@@ -102,3 +118,12 @@
   - webpack-merge：提取公共配置，减少重复配置代码
 
 ##  Webpack 的热更新原理
+
+
+
+
+
+## 
+- https://juejin.cn/post/7103087727448424455
+- https://juejin.cn/post/7103128136098938917
+- https://juejin.cn/post/7100530232355979277
