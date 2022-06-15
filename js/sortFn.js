@@ -148,3 +148,8 @@ Array.prototype.quickSort = function () {
   const array = this;
   return quickSort(array);
 };
+
+/**
+ * 二分排序
+ * 思想:
+*/

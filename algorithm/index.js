@@ -1,3 +1,6 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable max-classes-per-file */
+/* eslint-disable consistent-return */
 /* eslint-disable no-continue */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
@@ -7,6 +10,25 @@ function TreeNode(val, left, right) {
   this.val = val;
   this.left = left;
   this.right = right;
+}
+
+class Stack {
+  constructor() {
+    this.arr = [];
+    this.length = 0;
+  }
+
+  push = (item) => {
+    this.length += 1;
+    return this.arr.push(item);
+  };
+
+  pop = () => {
+    this.length = this.length - 1 <= 0 ? 0 : this.length - 1;
+    return this.arr.pop();
+  };
+
+  getTop = () => this.arr[this.length - 1];
 }
 
 function getLeftBorder(array, target) {
@@ -127,54 +149,41 @@ function minSubArrayLen(s, nums) {
   return result;
 }
 
+// 59.螺旋矩阵II
 function generateMatrix(n) {
-  const arr = new Array(n).fill(0).map(() => new Array(n));
-
-  let loopCount = Math.floor(n / 2);
-
-  let i = 0;
-  let j = 0;
-
+  const arr = new Array(n).fill(0).map(() => ([]));
+  let loop = Math.floor(n / 2);
   let startX = 0;
   let startY = 0;
-
   let endIndex = n - 1;
   let num = 1;
-
-  while (loopCount > 0) {
-    i = startX;
-    j = startY;
+  while (loop > 0) {
+    let i = startX;
+    let j = startY;
     // i 和 j 此时是下标
     // endIndex 是 这条边 能填充的最末尾的下标
 
-    for (; j < endIndex; j++) {
-      arr[i][j] = num;
-      num++;
-    }
-
     for (; i < endIndex; i++) {
-      arr[i][j] = num;
-      num++;
+      arr[j][i] = num++;
     }
 
-    for (; j > startY; j--) {
-      // 回到起点前
-      arr[i][j] = num;
-      num++;
+    for (; j < endIndex; j++) {
+      arr[j][i] = num++;
     }
 
     for (; i > startX; i--) {
-      arr[i][j] = num;
-      num++;
+      arr[j][i] = num++;
     }
 
-    endIndex -= 1;
-    startX += 1;
-    startY += 1;
-    loopCount--;
+    for (; j > startY; j--) {
+      arr[j][i] = num++;
+    }
+    loop--;
+    endIndex--;
+    startX++;
+    startY++;
   }
-
-  if ((n % 2) !== 0) {
+  if (n % 2 !== 0) {
     const middleIndex = Math.floor(n / 2);
     arr[middleIndex][middleIndex] = num;
   }
@@ -828,6 +837,7 @@ function combinationSum3(n, k) {
   return result;
 }
 
+// 17.电话号码的字母组合
 function letterCombinations(str) {
   const map = {
     2: ['a', 'b', 'c'],
@@ -1640,9 +1650,282 @@ function searchBSTV2(root, val) {
   }
   if (node.val === val) {
     return node;
-  } if (node.val < val) {
+  }
+  if (node.val < val) {
     return searchBSTV2(node.right, val);
-  } if (node.val > val) {
+  }
+  if (node.val > val) {
     return searchBSTV2(node.left, val);
   }
 }
+
+// 739. 每日温度
+function dailyTemperatures(nums) {
+  const result = new Array(nums.length).fill(0);
+  const stack = [0];
+  for (let i = 1; i < nums.length; i++) {
+    let stackTop = stack[stack.length - 1];
+    let stackItem = nums[stackTop];
+    const item = nums[i];
+    if (item < stackItem) {
+      stack.push(i);
+    } else if (item === stackItem) {
+      stack.push(i);
+    } else if (item > stackItem) {
+      while (stack.length > 0 && item > stackItem) {
+        result[stackTop] = i - stackTop;
+        stack.pop();
+        stackTop = stack[stack.length - 1];
+        stackItem = nums[stackTop];
+      }
+      stack.push(i);
+    }
+  }
+  return result;
+}
+
+// 496.下一个更大元素 I
+function nextGreaterElement(nums1, nums2) {
+  const result = new Array(nums1.length).fill(-1);
+  const stack = new Stack();
+  const map = nums1.reduce((obj, item, index) => {
+    obj[item] = index;
+    return obj;
+  }, {});
+
+  stack.push(0); // stack 存放的是 nums2的index
+  for (let i = 1; i < nums2.length; i++) {
+    let stackItem = nums2[stack.getTop()];
+    const item = nums2[i];
+    if (stackItem === item) {
+      stack.push(i);
+    } else if (stackItem > item) {
+      stack.push(i);
+    } else if (stackItem < item) {
+      while (stack.length > 0 && stackItem < item) {
+        const mapIndex = map[stackItem];
+        if (mapIndex >= 0) {
+          result[mapIndex] = item;
+        }
+        stack.pop();
+        stackItem = nums2[stack.getTop()];
+      }
+      stack.push(i);
+    }
+  }
+  return result;
+}
+
+// 503.下一个更大元素II
+function nextGreaterElements(nums) {
+  const result = new Array(nums.length).fill(-1);
+  const stack = new Stack();
+  stack.push(0);
+  for (let i = 1; i < nums.length * 2; i++) {
+    const index = i % nums.length;
+    const item = nums[index];
+    let stackitem = nums[stack.getTop()];
+    if (item === stackitem) {
+      stack.push(index);
+    } else if (item < stackitem) {
+      stack.push(index);
+    } else if (item > stackitem) {
+      while (stack.length > 0 && item > stackitem) {
+        result[stack.getTop()] = item;
+        stack.pop();
+        stackitem = nums[stack.getTop()];
+      }
+      stack.push(index);
+    }
+  }
+  return result;
+}
+
+// 42. 接雨水
+function trap(nums) {
+  // 单调栈法
+  // 思想 横向计算行
+  // 从栈底到栈顶，递减
+  const stack = new Stack();
+  stack.push(0);
+
+  let sum = 0;
+  for (let i = 1; i < nums.length; i++) {
+    const item = nums[i];
+    let stackItem = nums[stack.getTop()];
+    if (item === stackItem) {
+      stack.pop();
+      stack.push(i);
+    } else if (item < stackItem) {
+      stack.push(i);
+    } else if (item > stackItem) {
+      while (stack.length && item > stackItem) {
+        // const height = Math.min(stackItem, item) - item;
+        // 当前项是右边界
+        // 所以中间空隙是将要出栈的一个
+        // 左边界是第二个将要出栈的
+        const right = item;
+        const middle = stackItem;
+        stack.pop();
+        const left = nums[stack.getTop()];
+        const height = Math.min(right, left) - middle;
+        const width = i - stack.getTop() - 1;
+        sum += (height > 0 ? width * height : 0);
+
+        stackItem = left;
+      }
+      stack.push(i);
+    }
+  }
+  return sum;
+}
+function trapV2(nums) {
+  // 双指针法 不推荐，时间复杂度高
+  // 思想 纵向计算列
+  // 左指针找左侧最高的
+  // 右指针找右侧最高的
+  let sum = 0;
+  for (let i = 0; i < nums.length; i++) {
+    const currentHeight = nums[i];
+    let leftH = currentHeight;
+    let rightH = currentHeight;
+    for (let j = i - 1; j >= 0; j--) {
+      leftH = Math.max(leftH, nums[j]);
+    }
+    for (let j = i + 1; j < nums.length; j++) {
+      rightH = Math.max(rightH, nums[j]);
+    }
+    const h = Math.min(leftH, rightH) - currentHeight;
+    sum += (h > 0 ? h : 0);
+  }
+  return sum;
+}
+function trapV3(nums) {
+  // 动态规划
+  // 双指针中 存在很多重复计算
+  // 思路:
+  // 从左到右遍历，左侧最高的 得出每个柱子右边柱子的最大高度
+  // 从右向左遍历，右侧最高的 得出每个柱子左边柱子的最大高度
+  let sum = 0;
+
+  const left = new Array(nums.length).fill(undefined);
+  const right = new Array(nums.length).fill(undefined);
+  left[0] = nums[0];
+  right[right.length - 1] = nums[nums.length - 1];
+
+  for (let i = 1; i < nums.length; i++) {
+    left[i] = Math.max(left[i - 1], nums[i]);
+  }
+  for (let i = nums.length - 2; i > -1; i--) {
+    right[i] = Math.max(right[i + 1], nums[i]);
+  }
+
+  for (let i = 0; i < nums.length; i++) {
+    const cH = nums[i];
+    const h = Math.min(left[i], right[i]) - cH;
+    sum += (h > 0 ? h : 0);
+  }
+  return sum;
+}
+
+// 84.柱状图中最大的矩形
+function largestRectangleArea(arr) {
+  // 单调栈法
+  // 找左右两边第一个比自己小的;
+  // 所以 栈底到栈顶 递增
+
+  const nums = [0, ...arr, 0];
+  // 首位需要加上一位，因为会包括真正的首尾
+
+  let maxArea = 0;
+  const stack = new Stack();
+  stack.push(0);
+  for (let i = 0; i < nums.length; i++) {
+    let stackItem = nums[stack.getTop()];
+    const item = nums[i];
+    if (item === stackItem) {
+      stack.pop();
+      stack.push(i);
+    } else if (item > stackItem) {
+      stack.push(i);
+    } else if (item < stackItem) {
+      while (item < stackItem) {
+        const right = i;
+        const middle = stack.getTop();
+        stack.pop();
+        const left = stack.getTop();
+        const width = (right - left - 1);
+        const height = nums[middle];
+        maxArea = Math.max(maxArea, width * height);
+        stackItem = nums[stack.getTop()];
+      }
+      stack.push(i);
+    }
+  }
+  return maxArea;
+}
+
+function largestRectangleAreaV2(nums) {
+  // 双指针法 时间复杂度高，leetcode 超时
+  // 找到左边第一个比自己小的 的右边
+  // 找到右边第一个比自己小的 的左边
+  // 所以当前项是最低的
+  let maxArea = 0;
+  for (let i = 0; i < nums.length; i++) {
+    let left = i;
+    let right = i;
+    for (;left >= 0; left--) {
+      if (nums[left] < nums[i]) {
+        break;
+      }
+    }
+    for (;right < nums.length; right++) {
+      if (nums[right] < nums[i]) {
+        break;
+      }
+    }
+    const width = right - left - 1;
+
+    const height = nums[i];
+    maxArea = Math.max(maxArea, width * height);
+  }
+  return maxArea;
+}
+
+function largestRectangleAreaV3(nums) {
+  // 动态规划
+  // 双指针中 存在很多重复计算
+  // 思路:
+  // 从左到右遍历，找到左边第一个比自己小的 的右边
+  // 从右向左遍历， 找到右边第一个比自己小的 的左边
+
+  let maxArea = 0;
+
+  const minLeft = [];
+  const minRight = [];
+  minLeft[0] = -1;
+  minRight[nums.length - 1] = nums.length;
+  for (let i = 1; i < nums.length; i++) {
+    let l = i - 1;
+    while (l >= 0 && nums[l] >= nums[i]) {
+      l = minLeft[l]; // TODO why?
+    }
+    minLeft[i] = l;
+  }
+  for (let i = nums.length - 2; i > -1; i--) {
+    let l = i + 1;
+    while (l < nums.length && nums[l] >= nums[i]) {
+      l = minRight[l]; // TODO why?
+    }
+    minRight[i] = l;
+  }
+  for (let i = 0; i < nums.length; i++) {
+    const width = minRight[i] - minLeft[i] - 1;
+    const height = nums[i];
+    maxArea = Math.max(maxArea, width * height);
+  }
+  return maxArea;
+}
+
+// 455.分发饼干
+[5, 4, 3, 2, 1].sort((a, b) => (a - b));

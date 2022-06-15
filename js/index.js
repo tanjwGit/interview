@@ -356,6 +356,11 @@ Generator 函数不是这样，它执行产生的上下文环境，一旦遇到y
 */
 
 
+6 instanceof Number // false
+new Number(111) instanceof Number // true
+Number(233) instanceof Number // false
+
+
 function a () {
   try {
     throw new Error(111)

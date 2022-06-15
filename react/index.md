@@ -162,6 +162,7 @@
   - mutation阶段:
     - 更新的节点: `useLayoutEffect`的销毁函数
     - 删除的节点: `componentWillUnmount`
+    - 调度 `useEffect` 的销毁函数
   - layout阶段:
     - 更新的class节点: `componentDidUpdate`
     - 新增的class节点: `componentDidMount`

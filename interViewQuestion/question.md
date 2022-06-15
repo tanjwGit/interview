@@ -140,6 +140,11 @@
   - LocalStorage 变化时，会触发storage事件
   - 调用 window.localStorage.setItem() 更改 LocalStorage
 
+  - localStorage.getItem()读取数据的时间是不可预测的。此外，这是一个阻塞型方法，浏览器会停止处理页面直到数据从磁盘中读出
+
+  - 隐私模式下，不可读取;
+
+
 ### js 判断运行环境？ 比如浏览器、 端内webView h5、小程序？
   -  window.navigator.userAgent
     - 声明了浏览器用于 HTTP 请求的用户代理头的值，可以提取该条信息中的一些特殊地 值
@@ -357,6 +362,50 @@
 
 ### express 与 koa 的区别？
 
+
+
+### 浏览器的 进程 与 线程？
+<!-- https://juejin.cn/post/6844903553795014663 -->
+
+
+
+### Promise.all 的实现？
+
+
+### 使用正则 校验钱的千分符格式 如 1,111,222.00或1.01或100，小数点后最多两位
+
+### ?? 与 ?. 的区别？
+  - ??
+    - null 或者 undefined, 就使用 ?? 后面的值
+
+
+### Object 的key 的访问顺序？
+ -  如： Object.keys({b:'b',a:'a', 2:2, 1:1})
+
+### 判断类型的方式？
+  - typeof
+  - instanceof
+  - toString: Object.prototype.toString.call
+
+### 如何操作 cookie ? 与cookie有关的标识？
+
+### transform 的劣势？
+  - 开启GPU硬件加速，提高了性能，但是可能会增加耗电
+  - 层爆炸, 可能导致产生大量不在预期内的合成层,浏览器虽然有层压缩，但也有很多无法压缩的情况；
+    - 很多不需要提升为合成层的元素因为某些不当操作成为了合成层;
+    - 解决层爆炸
+      - 让其他元素不要和合成层元素重叠
+      - 使用 3D 硬件加速提升动画性能时，最好给元素增加一个 z-index 属性，人为干扰合成的排序，可以有效减少创建不必要的合成层，提升渲染性能，移动端优化效果尤为明显
+
+
+### 浏览器中实现动画的方式？
+  - js canvas
+  - css
+    - transition 过渡
+    - animation 动画 keyframes
+  - js
+    - setTimeout setInterval
+    - requestAnimationFrame
 
 <br />
 <br />
