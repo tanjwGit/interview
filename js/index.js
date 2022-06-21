@@ -332,6 +332,25 @@ Object.defineProperty(Constructor, 'functionName', functionInfo);
 
 
 
+// babel 如何转译箭头函数
+function A() {
+  const a = 1;
+  return () => {
+  	console.log(this.a);
+  }
+}
+
+// =====>
+
+function A() {
+  var _this = this;
+
+  var a = 1;
+  return function () {
+    console.log(_this.a);
+  };
+}
+
 // 斐波那契数列
 // 利用 for...of、扩展运算符（...）、解构赋值和Array.from方法内部调用的，都是遍历器接口
 function* fibonacci(n) {

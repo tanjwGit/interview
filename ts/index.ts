@@ -31,10 +31,6 @@ const cat: Cat = {
 }
 
 
-// type Required<T> = {
-//   [P in keyof T]: T[P]
-// }
-
 
 
 
@@ -63,11 +59,6 @@ type ReturnType<T extends (...args: any[]) => any> =
   (
     T extends (...args: any[]) => infer R ? R : any
   )
-
-type add = (a: number, b: number) => string
-type sum = number
-type addReturnType = ReturnType<add>
-// type sumType = MyReturnType<sum>
 
 
 

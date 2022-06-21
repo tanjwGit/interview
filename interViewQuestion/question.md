@@ -2,68 +2,76 @@
 
 
 ### 什么是闭包？ 闭包为什么会导致
-<span id = "jump1.1">[跳转](#jump1.2)</span>
-<br />
+
 
 ### 闭包有什么作用
-<span id = "jump2.1">[跳转](#jump2.2)</span>
-<br />
+  - 私有变量
+  - 单例模式
+  - 克里化
 
 ### 什么会导致内存泄漏?
-<span id = "jump3.1">[跳转](#jump3.2)</span>
-<br />
+  - 内存泄露（Memory Leaks）：是指应用程序已经不再需要的内存，由于某种原因未返回给操作系统或者空闲内存池（Pool of Free Memory）。
+
+  - 内存泄露可能带来的问题：变慢、卡顿、高延迟
+  - 闭包
+  - 循环引用
+  - 全局变量引起的内存泄露
+  - 没有清理的 DOM 元素引用
+  - 被遗忘的定时器或者回调
+
+  - 如何分析？
+    - Chrome内存分析工具
+      - Performance
+      - Memory
 
 ### this.setState 发生了什么？
-<span id = "jump4.1">[跳转](#jump4.2)</span>
-<br />
+
 
 ### key 的作用？
-<span id = "jump5.1">[跳转](#jump5.2)</span>
-<br />
+
 
 ### 做过什么优化？做过webpack的优化没？
-<span id = "jump6.1">[跳转](#jump6.2)</span>
-<br />
+
 
 ### eventLoop?
-<span id = "jump7.1">[跳转](#jump7.2)</span>
-<br />
+
 
 ### 了解 Promise 吗？async呢？
-<span id = "jump8.1">[跳转](#jump8.2)</span>
-<br />
+
 
 ### 为什么重构? 从那些方面考虑？
-<span id = "jump9.1">[跳转](#jump9.2)</span>
-<br />
+  - 要解决的问题？
+    - 代码难以阅读
+    - 大量重复逻辑
+    - 永远不会走到的代码
+    - 一些不符合react思想的代码
+    - 大量挂载在 global 上的数据
+
+  - 其他的事情？
+    - 增加类型系统ts
+    - 增加代码规范eslint
 
 ### 为什么选择离职？
-<span id = "jump10.1">[跳转](#jump10.2)</span>
-<br />
+
 
 ### 写组件时要考虑那些东西？
-<span id = "jump11.1">[跳转](#jump11.2)</span>
-<br />
+  - 确定好对外的props, 不暴露无关的
+  - 可维护性;
+  - 与业务逻辑解耦;
+  - 组件文档与demo;
+  - 模块化;
 
 ### 深拷贝，浅拷贝？ 
-<span id = "jump12.1">[跳转](#jump12.2)</span>
-<br />
+
 
 ### 问代码执行，要从执行原理的层面回答，而不是照着代码读;
-<span id = "jump13.1">[跳转](#jump13.2)</span>
-<br />
+
 
 ### Promise.all，三个任务，第二个失败，第三个还会执行吗？执行，但不等待执行结果
-<span id = "jump14.1">[跳转](#jump14.2)</span>
-<br />
 
-### interface 和 type 的区别;
-<span id = "jump15.1">[跳转](#jump15.2)</span>
-<br />
 
 ### vue-route、react-route 路由原理?
-<span id = "jump16.1">[跳转](#jump16.2)</span>
-<br />
+
 
 ### 平时是怎么学习前端的？
   - 阅读官方文档;
@@ -157,15 +165,8 @@
 
 ### ts 的好处
 
-### interface type 
-  - interface只能定义对象类型。
-  - type可以声明任何类型，基础类型、联合类型、交叉类型
-
-  - 不允许两个别名相同
-  - 同名的 interface 会被合并
-
-  - interface可以使用extends,和implements,进行扩展
-  - 但type、 interface 都可以使用交叉类型&进行合并
+### interface和type的区别
+  [跳转](../ts/index.md#interface和type的区别)
 
 ### interface A、 interface B 继承
 
@@ -407,152 +408,70 @@
     - setTimeout setInterval
     - requestAnimationFrame
 
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<br />
-<br />
-<br />
-<br />
-<br />
+### 如何取消请求？
 
 
+### useCallBack 作用?
 
-### 什么是闭包？ 闭包为什么会导致
-<span id = "jump1.2">[跳转](#jump1.1)</span>
-<br />
+### keep live?
+  - 动态切换组件时，可以缓存组件实例
+    - 切换到其他组件B时，组件A不被销毁
+  - vue
+    - 内置 `<KeepAlive></KeepAlive>`
 
+### react 如何给一个组件的所有子组件添加class?
+```jsx
+  function Parent({ children }) {
+    const childrenArr = React.Children.toArray(children);
+    let newClassName = 'classA';
+    return childrenArr.map((child, index) => {
+      const className = `${child.props.className ?? ''} ${newClassName}`
+      return React.cloneElement(child, { className })
+    })
+  }
+```
 
+### 如何把项目中的px 都转化为 rem?
+  - 社区方案
+    - `px2rem-loader` + `lib-flexible`
+  - 原理
+    - 根据dpr 设置跟节点 fontsize 或者 viewport
+    - 利用loader修改px为rem
 
-
-### 闭包有什么作用
-<span id = "jump2.2">[跳转](#jump2.1)</span>
-
-  - 私有变量
-  - 单例模式
-  - 克里化
-
-<br />
-
-### 什么会导致内存泄漏?
-<span id = "jump3.2">[跳转](#jump3.1)</span>
-<br />
-
-- 内存泄露（Memory Leaks）：是指应用程序已经不再需要的内存，由于某种原因未返回给操作系统或者空闲内存池（Pool of Free Memory）。
-
-- 内存泄露可能带来的问题：变慢、卡顿、高延迟
-- 闭包
-- 循环引用
-- 全局变量引起的内存泄露
-- 没有清理的 DOM 元素引用
-- 被遗忘的定时器或者回调
-
-- 如何分析？
-  - Chrome内存分析工具
-    - Performance
-    - Memory
-
-### this.setState 发生了什么？
-<span id = "jump4.2">[跳转](#jump4.1)</span>
-<br />
-
-### key 的作用？
-<span id = "jump5.2">[跳转](#jump5.1)</span>
-<br />
-
-### 做过什么优化？做过webpack的优化没？
-<span id = "jump6.2">[跳转](#jump6.1)</span>
-<br />
-
-### eventLoop?
-<span id = "jump7.2">[跳转](#jump7.1)</span>
-<br />
-
-### 了解 Promise 吗？async呢？
-<span id = "jump8.2">[跳转](#jump8.1)</span>
-<br />
-
-### 为什么重构? 从那些方面考虑？
-<span id = "jump9.2">[跳转](#jump9.1)</span>
-
-
-  - 要解决的问题？
-    - 代码难以阅读
-    - 大量重复逻辑
-    - 永远不会走到的代码
-    - 一些不符合react思想的代码
-    - 大量挂载在 global 上的数据
-
-  - 其他的事情？
-    - 增加类型系统ts
-    - 增加代码规范eslint
-
-<br />
+### 一个div  画出三角形、梯形？
+  - 三角形
+    ```html
+      <style>
+      .triangle {
+          width: 0;
+          height: 0;
+          border: 100px solid transparent;
+          border-bottom: 100px solid #00f;
+        }
+      </style>
+      <div class="triangle"></div>
+    ```
+  - 梯形
+    - 利用border
+    ```html
+      <style>
+        .trapezoid {
+            width: 50px;
+            height: 50px;
+            background: #ff0;
+            border-top: 50px solid #f00;
+            border-bottom: 50px solid #00f;
+            border-left: 50px solid #0f0;
+            border-right: 50px solid #0ff;
+        }
+      </style>
+      <div class="trapezoid"></div>
+    ```
+    - 利用伪元素
 
 
-### 为什么选择离职？
-<span id = "jump10.2">[跳转](#jump10.1)</span>
-<br />
-
-### 写组件时要考虑那些东西？
-<span id = "jump11.2">[跳转](#jump11.1)</span>
-  - 确定好对外的props, 不暴露无关的
-  - 可维护性;
-  - 与业务逻辑解耦;
-  - 组件文档与demo;
-  - 模块化;
-<br />
+### express 与 koa 的错误处理？
+[跳转](../node/expressKoa.md#express-与-koa-的错误处理)
 
 ### 写 npm 包需要考虑什么？
   - 示例代码
@@ -560,23 +479,4 @@
   - package.json
   - 版本升级间的兼容性
 
-### 深拷贝，浅拷贝？ 
-<span id = "jump12.2">[跳转](#jump12.1)</span>
-<br />
-
-### 问代码执行，要从执行原理的层面回答，而不是照着代码读;
-<span id = "jump13.2">[跳转](#jump1.1)</span>
-<br />
-
-### Promise.all，三个任务，第二个失败，第三个还会执行吗？执行，但不等待执行结果
-<span id = "jump14.2">[跳转](#jump13.1)</span>
-<br />
-
-### interface 和 type 的区别;
-<span id = "jump15.2">[跳转](#jump14.1)</span>
-<br />
-
-### vue-route、react-route 路由原理?
-<span id = "jump16.2">[跳转](#jump15.1)</span>
-<br />
 

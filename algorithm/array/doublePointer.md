@@ -11,14 +11,14 @@
 * 快慢指针法
 ```js
 var removeElement = function(nums, val) {
-    let index = 0;
-    for (let i = 0; i < nums.length; i++) {
-        if (nums[i] !== val) { // 把不是val的值，前移
-            nums[index] = nums[i];
-            index++;
+    let slowIndex = 0;
+    for (let fastIndex = 0; fastIndex < nums.length; fastIndex++) {
+        if (nums[fastIndex] !== val) { // 把不是val的值，前移
+            nums[slowIndex] = nums[fastIndex];
+            slowIndex++;
         }
     }
-    return index;
+    return slowIndex;
 }; 
 ```
 * 相向双指针

@@ -130,7 +130,36 @@ function flat2(array, num) {
 // TODO
 
 // 比较版本号大小
-// TODO
+function compareVersion(version1, version2) {
+  const reslutEnum = {
+    equal: 0,
+    version1Bigger: 1,
+    version2Bigger: -1,
+  };
+  if (version1 === version2) {
+    return reslutEnum.equal;
+  }
+  const arrV1 = version1.split('.');
+  const arrV2 = version2.split('.');
+
+  const length = Math.max(arrV1.length, arrV2.length);
+
+  for (let i = 0; i < length; i++) {
+    const num1 = Number(arrV1[i] || 0);
+    const num2 = Number(arrV2[i] || 0);
+    if (num1 !== num2) {
+      return num1 > num2 ? reslutEnum.version1Bigger : reslutEnum.version2Bigger;
+    }
+  }
+  return reslutEnum.equal;
+}
+
+console.log(compareVersion('1.2.2.2.2', '1.3.55')); // -1
+console.log(compareVersion('1.2', '1.2.55')); // -1
+console.log(compareVersion('1.2.2', '1.2.2')); // 0
+console.log(compareVersion('1.3.2', '1.2.2')); // 1
+console.log(compareVersion('1.20.2', '1.3.20')); // 1
+console.log(compareVersion('1.0.1.0', '1.0.1')); // 0
 
 // 数组转树
 // TODO
@@ -224,3 +253,24 @@ function eventLoop(n) {
     exec();
   };
 }
+
+// dom工厂函数
+// TODO 对attributes 和 events 的细节处理
+function creatDom(elementType, attributes, events, parent) {
+  const dom = document.createElement(elementType);
+  Object.entries(attributes ?? {}).forEach(([key, value]) => {
+    dom[key] = value;
+  });
+  Object.entries(events ?? {}).forEach(([key, value]) => {
+    dom[key] = value;
+  });
+  parent.appendChild(dom);
+}
+
+// 下划线命名转为驼峰命名的函数
+function transformNaming(str) {
+  return str.split('_').reduce((result, item) => `${result}${item[0].toUpperCase()}${item.slice(1)}`);
+}
+
+//  拆分数字 TODO
+function calc() {}
