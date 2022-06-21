@@ -33,40 +33,23 @@ const cat: Cat = {
 
 
 
-
-
-type Required<T> = {
-  [P in keyof T]-?: T[P]
-}
-
-
-type Pick<T, K extends keyof T> = {
-  [P in K]: T[P]
-}
-
-
-type Exclude<T, U> = T extends U ? never : T;
-
-
-type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
-
 type A = {
   [key: string]: number
 }
 
-// ReturnType 原理
-type ReturnType<T extends (...args: any[]) => any> =
-  (
-    T extends (...args: any[]) => infer R ? R : any
-  )
 
 
 
-
-
-
-
-
+// Extract < Union1, Union2 >
+// Exclude < T, U >
+// Pick < T, K >
+// Omit < Type, Keys >
+// Partial < T >
+// Required < Type >
+// Record < Keys, Type >
+// Readonly < T >
+// ReturnType < T >
+// Parameters < T >
 
 
 
