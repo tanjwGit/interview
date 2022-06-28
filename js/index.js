@@ -233,7 +233,10 @@ setTimeout(function() {
 // TODO: 需要在好好琢磨琢磨
 // node 的事件循环 与浏览器不同
 // node 中宏任务分为不同的阶段
-// 定时器属于timers阶段、setImmediate属于check阶段、socket的关闭事件属于close callbacks阶段、其他所有的宏任务都属于poll阶段
+// 定时器属于timers阶段、
+// setImmediate属于check阶段、
+// socket的关闭事件属于close callbacks阶段、
+// 其他所有的宏任务都属于poll阶段
 // 执行到某个阶段，那么会执行完该阶段所有的任务
 
 // process.nextTick和微任务 在上述每个阶段的最后执行

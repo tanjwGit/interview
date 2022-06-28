@@ -20,6 +20,10 @@
       - 使用时根据地址 找到 内存空间，实现 动态绑定
   - import
     - ES module会根据 import 关系构建一棵依赖树,遍历到树的叶子模块后，然后根据依赖关系，反向找到父模块，将export/import指向同一地址;
+- AMD
+- UMD
+  - 通用模块定义 (universal Module Definition)
+  - [跳转](#UMD)
 # es6 Module
 ## export
 ## import
@@ -47,7 +51,7 @@ export { foo };
 
 
 ## ES6 模块与 CommonJS 模块的差异
-- CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
+- CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用地址。
   - CommonJS 读取一次，会有缓存，可修改
   - ES6 引用，但只读，不可修改
 - CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。
@@ -253,3 +257,17 @@ export { foo };
   9. console.log('a模块引用b模块：', b) 根据模块记录到指向的内存中取值，是{ b: '修改值-b模块内变量' }
   10. a = '修改值-a模块内变量' 模块记录中，存储a的内存块值修改
   11. 【入口模块】console.log('入口模块引用a模块：',a) 根据模块记录，到指向的内存中取值，是{ a: '修改值-a模块内变量' }
+
+
+
+
+## AMD
+  - 异步模块定义
+
+
+## UMD
+  - 通用模块定义 (universal Module Definition)
+  - 兼容commonjs、AMD, 可以做到 浏览器 node等多端环境使用
+  - 当使用 Rollup/Webpack 之类的打包器时，UMD 通常用作备用模块
+
+## npm 包为什么通常使用UMD规范打包？ 为什么会同时编译成 多种 模块规范？

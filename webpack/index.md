@@ -119,8 +119,27 @@
 
 ##  Webpack 的热更新原理
 
+## splitchunks
+  - optimization.splitChunks.chunks
+    - async
+    - initial
+    - all
+  - optimization.splitChunks. cacheGroups
 
 
+## 常用优化
+  - 打包优化
+    - 页面组件拆分，优先加载首屏所需资源
+    - webpack splitchunks 拆分公共依赖，提高缓存利用率(拆包)
+    - 组件按需加载
+    - tree shaking 缩减代码体积
+  - 非关键js、css延迟加载
+    - defer、async、 动态加载js
+  - 媒体资源优化加载优化
+    - 图片 视频 懒加载
+    - 资源压缩
+  - 其他
+    - 数据埋点 延迟发送，不阻塞onload事件触发;
 
 
 ## 

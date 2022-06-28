@@ -123,8 +123,28 @@ function flat2(array, num) {
   }, []);
 }
 
+function flat3(array, num) {
+  // 借鉴树的层序遍历 思想
+  //  时间复杂度高一点
+  const queue = [...array];
+  let deep = num;
+  while (queue.length > 0 && deep > 0) {
+    deep--;
+    const { length } = queue;
+    for (let i = 0; i < length; i++) {
+      const item = queue.shift();
+      if (Array.isArray(item)) {
+        queue.push(...item);
+      } else {
+        queue.push(item);
+      }
+    }
+  }
+  return queue;
+}
+const tree = [[[1]], 2, [3]];
 // const tree = ['a', ['b', 'c'], ['d', 'e', ['f']]];
-// flat(tree, 0);
+flat3(tree, 2);
 
 // 判断是否为子数组
 // TODO
@@ -160,9 +180,6 @@ console.log(compareVersion('1.2.2', '1.2.2')); // 0
 console.log(compareVersion('1.3.2', '1.2.2')); // 1
 console.log(compareVersion('1.20.2', '1.3.20')); // 1
 console.log(compareVersion('1.0.1.0', '1.0.1')); // 0
-
-// 数组转树
-// TODO
 
 // 合并两个有序数组
 // TODO

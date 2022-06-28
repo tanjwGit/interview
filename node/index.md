@@ -1,72 +1,92 @@
-## node 项目 部署
-  - pm2 基本了解
-    - pm2（process manager）是一个进程管理工具，维护一个进程列表，可以用它来管理你的node进程，负责所有正在运行的进程，并查看node进程的状态，也支持性能监控，负载均衡等功能
-    - 优点
-      - 监听文件变化，自动重启程序
-      - 支持性能监控
-      - 负载均衡
-      - 程序崩溃自动重启
-      - 服务器重新启动时自动重新启动
-      - 自动化部署项目
-    - 常用命令
-      - 启动node程序
-        - `pm2 start start.js`
-      - 启动进程并指定应用的程序名
-        - `pm2 start app.js --name application1`
-      - 集群模式启动
-        ```
-          // -i 表示 number-instances 实例数量
-          // max 表示 PM2将自动检测可用CPU的数量 可以自己指定数量
-          pm2 start start.js -i max
-        ```
-      - 添加进程监视
-        - `pm2 start app.js --name start --watch` 
-        - 在文件改变的时候会重新启动程序
-      - 列出所有进程
-        - pm2 list
-        - pm2 ls // 简写
-      - 从进程列表中删除进程
-        -  pm2 delete [appname] | id
-        - 进程名 或 进程id
-        -  pm2 delete all 删除所有进程
-      - 查看某个进程具体情况
-        - pm2 describe app
-      - 查看进程的资源消耗情况
-        -  pm2 monit
-      - 重启进程
-        - pm2 restart app // 重启指定名称的进程
-        - pm2 restart all // 重启所有进程
 
-  - 通过pm2配置文件来自动部署项目
-    - 确保服务器安装了pm2 `npm install pm2 -g`
-    - 在项目根目录下新建一个 deploy.yaml 文件
-      ```yaml
-        # deploy.yaml
-        apps:
-          - script: ./start.js       # 入口文件
-            name: 'app'              # 程序名称
-            env:                     # 环境变量
-              COMMON_VARIABLE: true
-            env_production:
-              NODE_ENV: production
+## setImmediate和setTimeout(fn, 0)的执行顺序？
+  ```js
+    setInterval(function() {
+        setTimeout(function() {
+            console.log('setTimeout3');
+        }, 0);
 
-        deploy:                     # 部署脚本
-          production:               # 生产环境
-            user: lentoo            # 服务器的用户名
-            host: 192.168.2.166     # 服务器的ip地址
-            port: 22                # ssh端口
-            ref: origin/master      # 要拉取的git分支
-            ssh_options: StrictHostKeyChecking=no # SSH 公钥检查
-            repo: https://github.com/**.git # 远程仓库地址
-            path: /home              # 拉取到服务器某个目录下
-            pre-deploy: git fetch --all # 部署前执行
-            post-deploy: npm install &&  pm2 reload deploy.yaml --env production # 部署后执行
-            env:
-              NODE_ENV: production
-      ```
-    - 配置git的ssh免密认证
-      - 略过
-    - 使用pm2部署项目
-      - 首次部署 `pm2 deploy deploy.yaml production setup`
-      - 部署完成后，既可登陆服务器查看配置的目录下是否从git上拉取了项目
-      - 再次部署 `pm2 deploy deploy.yaml production update`
+        setImmediate(function() {
+            console.log('setImmediate4');
+        });
+
+        console.log('console1');
+
+        process.nextTick(function() {
+            console.log('nextTick2');
+        });
+    }, 1000)
+  ```
+
+  - setImmediate(fn): 想异步执行代码， 任何作为 setImmediate() 参数传递的函数都是在事件循环的下一次迭代中执行的回调。[node setImmediate](https://nodejs.dev/learn/understanding-setimmediate)
+
+  - 从 node 的事件轮训机制上讲 `setTimeout` 的执行阶段早于 `setImmediate`
+  - 但在实际中先后顺序不一定
+    - 原因：
+      - setTimeout 在 node 的源码中, 0 会被修改为 1;
+        - 经过尝试在浏览器中, 0 应该也被修改为了 1;
+      - 还有一种说法是 创建 setTimeout 任务时，会涉及到 创建红黑树等到性能消耗
+
+
+## 并行/并发
+  - 示意图
+    ![并行与并发](http://joearms.github.io/images/con_and_par.jpg)
+    - 并发: concurrent
+      -  2 个队列 对应 1 个咖啡机
+    - 并行: parallel
+      -  2 个队列 对应 2 个咖啡机
+    - Node.js 通过事件循环来挨个抽取事件队列中的一个个 Task 执行;
+    - 因此避免了传统的多线程情况下 `2个队列对应 1个咖啡机` 的时候上下文切换以及资源争抢/同步的问题, 所以获得了高并发的成就
+    - 在 node 中并行, 你可以通过 cluster 来再添加一个咖啡机。
+
+
+
+## Child Process
+ - TODO
+## cluster
+ - TODO
+## process.nextTick？
+  - 不属于 Event loop 中的某一个阶段, 而是在 Event loop 的每一个阶段结束后, 直接执行 nextTickQueue 中插入的 "Tick"， 直到整个 Queue 处理完
+  - 衍生题:
+    - 递归调用 process.nextTick 会怎么样?
+    ```js
+    function test() { 
+      process.nextTick(() => test());
+    }
+    test();
+    Promise.resolve().then(() => {
+      console.log(1);
+    })
+    // 一直执行 test, 后面的 Promise 无法执行
+    // 如果直接在控制台运行，会卡死
+    
+    ```
+
+    ```js
+    function test() { 
+      setTimeout(() => test(), 0);
+    }
+    test();
+    Promise.resolve().then(() => {
+      console.log(1);
+    })
+    // test 会被不停执行， 但 Promise 仍然能够执行
+    // 如果直接在控制台运行，不会卡死
+    ```
+
+
+## console.log()输出时是同步还是异步的问题？
+[跳转](https://github.com/byted-mofan/think/issues/30)
+  - 摘要
+    - JS中对象是引用类型，每次使用对象时，都只是使用了对象在堆中的引用;
+    - 当不展开对象看的时候，console.log打印的是对象当时的快照
+    - 展开对象时，会是重新 到 内存中读取对象的属性值;
+
+    - console.* 并不是JavaScript 正式的一部分, 是由宿主环境（请参考本书的“类型和语法”部分）添加到JavaScript 中的
+    - 因此，不同的浏览器和JavaScript 环境可以按照自己的意愿来实现，有时候这会引起混淆
+    - `尤其` 在某些条件下，某些浏览器的console.log(..) 并不会把传入的内容立即输出。
+    - 原因是 在许多程序（不只是JavaScript）中，I/O 是非常低速的阻塞部分，所以，（从页面/UI 的角度来说）浏览器在后台异步处理控制台I/O 能够提高性能，这时用户甚至可能根本意识不到其发生。
+
+    - 解决
+      - 优: 在js 调试器中 使用断点调试
+      - 次优: 把对象序列化后，在console
