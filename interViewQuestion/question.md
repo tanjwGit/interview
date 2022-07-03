@@ -480,3 +480,37 @@
   - 版本升级间的兼容性
 
 
+### npm 包为什么通常使用UMD规范打包？ 为什么会同时编译成 多种 模块规范？
+[跳转](../js/module.md#npm-包为什么通常使用umd规范打包-为什么会同时编译成-多种-模块规范)
+
+
+### 蚂蚁
+  - 数组转树(O(n)解法)
+  - 最大并发下载图片
+  - 比较版本号
+  - 倒计时 hooks 的实现
+
+
+### setImmediate和setTimeout(fn, 0)的执行顺序？
+[跳转](../node/index.md#setimmediate和settimeoutfn-0的执行顺序)
+
+
+### vite 比 webpack 开发时快的原因？
+vite 不用分析模块
+webpack 需要分析构建模块依赖
+
+
+### esMoudle b 中存在错误， a 单纯引用 b，是否会报错？
+
+### react 阻止事件传递？
+  - e.preventDefault() po 万 t
+  - e 是react 的合成事件
+
+### webpack chunk?
+  - 产生chunk的方式？
+    - 多入口打包
+    - 提取公共模块
+    - react 使用 异步组件 Lazy、Suspense
+
+
+### 为什么node 模块中可以使用 __dirname 等类似的变量?

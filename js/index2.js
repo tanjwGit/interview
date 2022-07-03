@@ -291,3 +291,25 @@ function transformNaming(str) {
 
 //  拆分数字 TODO
 function calc() {}
+
+// 防抖函数，连续操作时只会执行最后一次操作(副作用，方法会被延迟参数delay的时间执行)
+function debounce(fn, time) {
+  let timer = null;
+  return (...arg) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn(...arg);
+    }, time);
+  };
+}
+// 节流
+function throttle(fn, delay) {
+  let time = 0;
+  return (...arg) => {
+    const nowTime = Date.now();
+    if (nowTime - time >= delay) {
+      fn(...arg);
+      time = nowTime;
+    }
+  };
+}

@@ -10,6 +10,8 @@
   - https://juejin.cn/post/6844903848981577735#heading-7
   
   1. 执行微任务
-  2. 执行渲染操作
+  2. requestAnimationFrame
+  2. 执行渲染操作 重排重绘
+  3. requestIdleCallback
   3. 执行宏任务
 
