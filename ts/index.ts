@@ -71,8 +71,11 @@ type addReturnType = ReturnType<add>
 
 
 
-
-
+// 自定义工具函数
+/**
+ * 覆盖对象中存在的某些 key 的类型
+ */
+type Cover<T, U extends { [P in keyof T]: unknown }> = Omit<T, keyof U> & U
 
 
 
